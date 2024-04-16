@@ -1,0 +1,3 @@
+FROM postgres
+
+CMD ["postgres"]
