@@ -8,7 +8,7 @@ source ./env
 DOCKER_TAG="postgres"
 
 echo "Setting permissions"
-ssh "$PI_USER@$PI_IP" "sudo mkdir /var/lib/postgres"
+ssh "$PI_USER@$PI_IP" "sudo mkdir /var/lib/postgres" || true
 ssh "$PI_USER@$PI_IP" "sudo chown 70:70 /var/lib/postgres"
 
 echo "Building target for arm64"
@@ -21,7 +21,7 @@ echo "Removing old container"
 ssh "$PI_USER@$PI_IP" "docker container rm $DOCKER_TAG " || true
 
 echo "Grabbing current image id"
-OLD_IMAGE=$(ssh "$PI_USER@$PI_IP" "docker images --filter=reference='postgres' --format '{{.ID}}'")
+OLD_IMAGE=$(ssh "$PI_USER@$PI_IP" "docker images --filter=reference='$DOCKER_TAG' --format '{{.ID}}'")
 echo $OLD_IMAGE
 
 echo "Pushing new image"
