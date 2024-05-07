@@ -11,8 +11,11 @@ echo "Setting permissions"
 ssh "$PI_USER@$PI_IP" "sudo mkdir /var/lib/postgres" || true
 ssh "$PI_USER@$PI_IP" "sudo chown 70:70 /var/lib/postgres"
 
+echo "Setting builder to default"
+docker buildx use default
+
 echo "Building target for arm64"
-docker buildx build --platform linux/arm64 -t $DOCKER_TAG .
+docker buildx build --platform linux/arm64 -t $DOCKER_TAG . --load
 
 echo "Stopping old container"
 ssh "$PI_USER@$PI_IP" "docker stop $DOCKER_TAG " || true
